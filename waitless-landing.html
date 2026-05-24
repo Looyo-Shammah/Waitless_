@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WaitLess — WhatsApp Queue & Booking for Barbershops</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1A56DB;
+    --blue-dark: #0E3A9A;
+    --blue-light: #EBF2FF;
+    --blue-mid: #3B82F6;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --gray-light: #F3F6FB;
+    --text: #0F172A;
+    --gold: #FACC15;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: white;
+    border-bottom: 1px solid #E5EAF2;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(26,86,219,0.06);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--blue);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-icon::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 3px solid white;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+  }
+
+  .logo-icon::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    bottom: 8px;
+    right: 5px;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--blue-dark);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--blue); }
+
+  nav a.cta-nav {
+    background: var(--blue);
+    color: white;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+
+  nav a.cta-nav:hover { background: var(--blue-dark); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #F0F6FF 0%, #EBF2FF 60%, #DBEAFE 100%);
+    padding: 5rem 5% 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(26,86,219,0.08) 0%, transparent 70%);
+    top: -200px;
+    right: -100px;
+    border-radius: 50%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border: 1px solid #BFDBFE;
+    color: var(--blue);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-badge .dot {
+    width: 7px;
+    height: 7px;
+    background: #22C55E;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .hero h1 span {
+    color: var(--blue);
+    position: relative;
+  }
+
+  .hero h1 span::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--blue);
+    opacity: 0.2;
+    border-radius: 2px;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--gray);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    padding: 0.95rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(26,86,219,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(26,86,219,0.4);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--blue);
+    padding: 0.95rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: 2px solid var(--blue);
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: var(--blue-light);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.4s both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+
+  .stat span {
+    font-size: 0.82rem;
+    color: var(--gray);
+  }
+
+  /* PROBLEM */
+  .section {
+    padding: 5rem 5%;
+  }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.8rem;
+  }
+
+  .section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .problem-section {
+    background: var(--text);
+    color: white;
+  }
+
+  .problem-section .section-label { color: #93C5FD; }
+  .problem-section h2 { color: white; }
+
+  .problem-intro {
+    color: #94A3B8;
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .problem-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: background 0.2s;
+  }
+
+  .problem-card:hover {
+    background: rgba(255,255,255,0.08);
+  }
+
+  .problem-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .problem-card h4 {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: white;
+  }
+
+  .problem-card p {
+    font-size: 0.88rem;
+    color: #94A3B8;
+    line-height: 1.6;
+  }
+
+  .problem-cost {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .problem-cost strong {
+    color: #FCA5A5;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .problem-cost span { color: #94A3B8; font-size: 0.9rem; }
+
+  /* SOLUTION */
+  .solution-section { background: var(--white); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 2.5rem auto 0;
+  }
+
+  .feature-card {
+    background: var(--gray-light);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid #E5EAF2;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: #BFDBFE;
+    box-shadow: 0 8px 30px rgba(26,86,219,0.08);
+    transform: translateY(-3px);
+  }
+
+  .feature-emoji {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* HOW IT WORKS */
+  .how-section {
+    background: var(--blue-light);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 650px;
+    margin: 2.5rem auto 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 48px;
+    width: 2px;
+    height: calc(100% - 10px);
+    background: #BFDBFE;
+  }
+
+  .step-num {
+    width: 46px;
+    height: 46px;
+    background: var(--blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .step-content {
+    padding-bottom: 2.5rem;
+  }
+
+  .step-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .step-content p {
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* PRICING */
+  .pricing-section { background: white; }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 2.5rem auto 0;
+  }
+
+  .pricing-card {
+    border: 2px solid #E5EAF2;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--blue);
+    box-shadow: 0 8px 40px rgba(26,86,219,0.15);
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .pricing-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .price {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .price sup {
+    font-size: 1.2rem;
+    vertical-align: super;
+  }
+
+  .price-period {
+    font-size: 0.82rem;
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-features {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-features li {
+    font-size: 0.88rem;
+    color: var(--gray);
+    padding: 0.4rem 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    border-bottom: 1px solid #F3F6FB;
+  }
+
+  .pricing-features li::before {
+    content: '✓';
+    color: var(--blue);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .pricing-btn {
+    display: block;
+    padding: 0.85rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .pricing-btn.outline {
+    border: 2px solid var(--blue);
+    color: var(--blue);
+  }
+
+  .pricing-btn.outline:hover { background: var(--blue-light); }
+
+  .pricing-btn.filled {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 4px 15px rgba(26,86,219,0.3);
+  }
+
+  .pricing-btn.filled:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+  }
+
+  /* URGENCY */
+  .urgency-section {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: white;
+    text-align: center;
+    padding: 4rem 5%;
+  }
+
+  .urgency-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .urgency-section p {
+    color: #BFDBFE;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .spots-bar {
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .spots-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    color: #BFDBFE;
+  }
+
+  .bar {
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    width: 70%;
+    background: var(--gold);
+    border-radius: 100px;
+  }
+
+  .urgency-perks {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .perk {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    color: #BFDBFE;
+  }
+
+  .perk::before { content: '✓'; color: var(--gold); font-weight: 700; }
+
+  .urgency-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--blue-dark);
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .urgency-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+
+  /* TESTIMONIAL */
+  .testimonial-section {
+    background: var(--gray-light);
+    padding: 4rem 5%;
+    text-align: center;
+  }
+
+  .testimonial-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 560px;
+    margin: 2rem auto 0;
+    border: 1px solid #E5EAF2;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .stars { color: #FACC15; font-size: 1.2rem; margin-bottom: 1rem; }
+
+  .testimonial-card p {
+    font-style: italic;
+    color: var(--gray);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .testimonial-author {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: #94A3B8;
+    text-align: center;
+    padding: 2rem 5%;
+    font-size: 0.85rem;
+  }
+
+  footer .logo-text { color: white; font-size: 1.1rem; }
+  footer .logo-text span { color: #93C5FD; }
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero { padding: 3rem 5% 2.5rem; }
+    .hero-stats { gap: 1.5rem; }
+    .section { padding: 3.5rem 5%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon"></div>
+    <span class="logo-text">Wait<span>Less</span></span>
+  </a>
+  <a href="https://wa.me/+256766799434" class="cta-nav">Get Free Access →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Now accepting founding members — 3 spots left
+  </div>
+  <h1>Stop Losing Customers<br>to <span>Long Queues</span></h1>
+  <p>Let customers book via WhatsApp in seconds — they wait at home, show up on time, and you never lose a walk-away again.</p>
+  <div class="hero-btns">
+    <a href="https://wa.me/+256766799434" class="btn-primary">👉 Claim Free 30-Day Access</a>
+    <a href="#how" class="btn-secondary">See How It Works</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><strong>60%</strong><span>Fewer no-shows</span></div>
+    <div class="stat"><strong>$0</strong><span>Setup cost</span></div>
+    <div class="stat"><strong>2 min</strong><span>To go live</span></div>
+    <div class="stat"><strong>0</strong><span>App downloads needed</span></div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section problem-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label">The Problem</div>
+    <h2>Your Queue Is Costing You More<br>Than You Think</h2>
+    <p class="problem-intro">Every barbershop and salon owner faces the same silent killers every single day — and most don't even realize the money they're losing.</p>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🚶</div>
+        <div>
+          <h4>Silent Walk-Aways</h4>
+          <p>Customers see a long queue and leave without a word. You never know they were there. That's $5–$15 gone — 10–20 times a day.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📱</div>
+        <div>
+          <h4>WhatsApp Chaos</h4>
+          <p>"How many people waiting?" floods your personal phone all day. You're cutting hair with one hand and typing with the other.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">👻</div>
+        <div>
+          <h4>No-Show Nightmare</h4>
+          <p>You save a slot. They don't show. 20–30 minutes wasted. The next customer is delayed. Your whole day falls apart.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⚔️</div>
+        <div>
+          <h4>Queue Arguments</h4>
+          <p>Someone tries to jump the line. Arguments break out. You stop working to mediate. Every time it happens, you lose money.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <div>
+          <h4>Running Blind</h4>
+          <p>You can't answer: how many customers did I lose today? What's my busiest hour? You're guessing instead of growing.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">😴</div>
+        <div>
+          <h4>Dead Slow Days</h4>
+          <p>Monday mornings are dead. You have no way to reach your customers and say "come in now — no waiting." Revenue disappears.</p>
+        </div>
+      </div>
+    </div>
+    <div class="problem-cost">
+      <strong>💸 Average barbershop loses $1,500–$2,000/month from these problems alone</strong>
+      <span>WaitLess costs $12/month. It pays for itself in the first hour.</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section solution-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label">The Solution</div>
+    <h2>Everything You Need.<br>Nothing You Don't.</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-emoji">📲</span>
+        <h3>WhatsApp Booking</h3>
+        <p>Customers book their spot with one tap on your link. No app download. No signup. Works on any phone, anywhere in the world.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">⏰</span>
+        <h3>Automatic Reminders</h3>
+        <p>System sends a WhatsApp reminder 30 mins before their turn. No-shows drop by 60% from day one — automatically.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">📺</span>
+        <h3>Live Queue Display</h3>
+        <p>Show your real-time queue on any TV or screen in your shop. No more arguments. Customers see exactly where they stand.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">✂️</span>
+        <h3>Multi-Staff Support</h3>
+        <p>Each barber gets their own queue. Customers pick their preferred barber. Workload balances itself — fairly and automatically.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">📣</span>
+        <h3>Broadcast Messages</h3>
+        <p>Slow Tuesday? Send one WhatsApp blast to all your customers: "Zero wait time — come in now!" Fill your shop in 30 minutes.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">📈</span>
+        <h3>Simple Analytics</h3>
+        <p>See your busiest hours, track no-shows, and know exactly how many customers you served — without a single spreadsheet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section" id="how">
+  <div style="max-width:700px;margin:0 auto;">
+    <div class="section-label">How It Works</div>
+    <h2>Live in Under 2 Minutes</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Share Your Booking Link</h4>
+          <p>You get a unique link. Share it on WhatsApp, stick it on your door, post it on Instagram. Customers can find and book you instantly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Customers Book & Get a Queue Number</h4>
+          <p>They click, pick their barber, and instantly receive a WhatsApp confirmation with their queue number and estimated wait time.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>They Wait at Home, Show Up on Time</h4>
+          <p>WaitLess sends them a reminder when it's almost their turn. They arrive exactly when needed — no crowding, no chaos.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>You Run a Smoother, More Profitable Shop</h4>
+          <p>Mark them as served with one tap. See your daily stats. Watch your revenue grow as zero customers walk away anymore.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-section">
+  <div class="section-label">Early Users</div>
+  <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;">What Founding Members Say</h2>
+  <div class="testimonial-card">
+    <div class="stars">★★★★★</div>
+    <p>"I used to lose at least 10 customers a day to the queue. With WaitLess, they book and wait at home. My income went up noticeably in the very first week. I wish I had this years ago."</p>
+    <div class="testimonial-author">— Beta User, Lagos 🇳🇬</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section">
+  <div style="max-width:900px;margin:0 auto;text-align:center;">
+    <div class="section-label">Pricing</div>
+    <h2>Simple, Honest Pricing</h2>
+    <p style="color:var(--gray);margin-top:0.5rem;">No hidden fees. Cancel anytime. Start free for 30 days.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3>Starter</h3>
+        <div class="price"><sup>$</sup>12</div>
+        <div class="price-period">per month</div>
+        <ul class="pricing-features">
+          <li>1 staff member</li>
+          <li>Unlimited bookings</li>
+          <li>WhatsApp reminders</li>
+          <li>Live queue page</li>
+          <li>Basic dashboard</li>
+        </ul>
+        <a href="https://wa.me/+256766799434" class="pricing-btn outline">Get Started Free</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="featured-badge">⚡ Most Popular</div>
+        <h3>Growth</h3>
+        <div class="price"><sup>$</sup>25</div>
+        <div class="price-period">per month</div>
+        <ul class="pricing-features">
+          <li>Up to 5 staff members</li>
+          <li>Everything in Starter</li>
+          <li>No-show tracking</li>
+          <li>Broadcast messages</li>
+          <li>Analytics dashboard</li>
+        </ul>
+        <a href="https://wa.me/+256766799434" class="pricing-btn filled">Get Started Free</a>
+      </div>
+      <div class="pricing-card">
+        <h3>Pro</h3>
+        <div class="price"><sup>$</sup>50</div>
+        <div class="price-period">per month</div>
+        <ul class="pricing-features">
+          <li>Unlimited staff</li>
+          <li>Everything in Growth</li>
+          <li>Priority WhatsApp support</li>
+          <li>Advanced analytics</li>
+          <li>Custom branding</li>
+        </ul>
+        <a href="https://wa.me/+256766799434" class="pricing-btn outline">Get Started Free</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- URGENCY -->
+<section class="urgency-section">
+  <h2>⚡ Founding Member Offer — Almost Full</h2>
+  <p>I'm opening just 10 spots for founding members who get lifetime locked-in pricing and direct access to me personally.</p>
+  <div class="spots-bar">
+    <div class="spots-label">
+      <span>7 spots taken</span>
+      <span>3 remaining</span>
+    </div>
+    <div class="bar"><div class="bar-fill"></div></div>
+  </div>
+  <div class="urgency-perks">
+    <div class="perk">30 days completely free</div>
+    <div class="perk">Locked-in price forever</div>
+    <div class="perk">Direct WhatsApp support</div>
+    <div class="perk">Shape the product</div>
+  </div>
+  <a href="https://wa.me/+256766799434" class="urgency-btn">
+    💬 Claim My Spot on WhatsApp
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="logo-text">Wait<span>Less</span></span>
+    <p>Built for barbershops, salons and service businesses worldwide.</p>
+    <p>Questions? WhatsApp us directly — we respond within 1 hour.</p>
+    <p>© 2025 WaitLess. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
